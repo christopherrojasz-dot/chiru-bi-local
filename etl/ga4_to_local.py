@@ -169,7 +169,7 @@ def upsert_event_daily(cur, rows: List[Tuple[dt.date, str, int, int, int]]) -> i
     if not rows:
         return 0
     sql = '''
-    INSERT INTO ga4.event_daily (day, event_name, event_count, total_users, sessions, updated_at)
+    INSERT INTO ga4.event_daily (day, event_name, event_count, total_users, sessions)
     VALUES %s
     ON CONFLICT (day, event_name)
     DO UPDATE SET
@@ -186,7 +186,7 @@ def upsert_funnel_daily(cur, rows: List[Tuple[dt.date, int, int, int, int, int]]
     if not rows:
         return 0
     sql = '''
-    INSERT INTO ga4.funnel_daily (day, sessions, view_item, add_to_cart, begin_checkout, purchase, updated_at)
+    INSERT INTO ga4.funnel_daily (day, sessions, view_item, add_to_cart, begin_checkout, purchase)
     VALUES %s
     ON CONFLICT (day)
     DO UPDATE SET
