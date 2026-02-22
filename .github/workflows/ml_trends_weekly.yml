@@ -1,0 +1,27 @@
+name: ml-trends-weekly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * 1"  # Lunes 12:00 UTC (ajustable)
+
+jobs:
+  fetch-ml-trends:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run ML trends fetch
+        run: python etl/ml_trends_fetch_to_csv.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ml_trends_weekly_csv
+          path: data/ml_trends_weekly.csv
