@@ -7,10 +7,6 @@ from urllib.parse import urlencode
 import urllib.request
 
 
-KW_SOURCE = Path("data/trends_weekly.csv")   # usamos tus keywords ya consolidadas
-OUT_CSV = Path("data/ml_weekly.csv")
-
-
 def monday_of(d: date) -> date:
     return d - timedelta(days=d.weekday())
 
@@ -27,9 +23,11 @@ def pct(values, p: float):
     return float(v[f] + (v[c] - v[f]) * (k - f))
 
 
-def read_keywords_from_trends(limit: int = 10):
+KW_SOURCE = Path("data/keywords_mvp.csv")  # fuente versionada para Actions
+
+def read_keywords(limit: int = 10):
     if not KW_SOURCE.exists():
-        raise SystemExit("Falta data/trends_weekly.csv (fuente de keywords)")
+        raise SystemExit("Falta data/keywords_mvp.csv (fuente de keywords)")
     kws = []
     with KW_SOURCE.open("r", encoding="utf-8") as f:
         r = csv.DictReader(f)
@@ -60,7 +58,7 @@ def main():
     site_id = "MPE"
     wk = monday_of(date.today()).isoformat()
 
-    keywords = read_keywords_from_trends(limit=10)
+    keywords = read_keywords(limit=10)
     if not keywords:
         print("[OK] No hay keywords para ML.")
         return 0
