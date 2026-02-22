@@ -3,7 +3,7 @@ name: ml-trends-weekly
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * 1"  # Lunes 12:00 UTC (ajustable)
+    - cron: "0 12 * * 1"
 
 jobs:
   fetch-ml-trends:
@@ -23,5 +23,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ml_trends_weekly_csv
-          path: data/ml_trends_weekly.csv
+          name: ml_trends_weekly_artifact
+          path: |
+            data/ml_trends_weekly.csv
+            data/ml_trends_debug.json
