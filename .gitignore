@@ -16,3 +16,6 @@ dumps/*.sql
 # OS
 .DS_Store
 Thumbs.db
+
+cmd/_env_neon.local.cmd
+*.log
