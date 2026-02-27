@@ -47,15 +47,29 @@ BEGIN
       ADD CONSTRAINT ck_calendar_priority
       CHECK (prioridad BETWEEN 1 AND 5);
   END IF;
+END $$;
 
-  -- unique para seeds idempotentes
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_constraint
-    WHERE conname = 'ux_calendar_event_dates'
-  ) THEN
-    ALTER TABLE analytics.commercial_calendar_pe
-      ADD CONSTRAINT ux_calendar_event_dates
-      UNIQUE (event_name, start_date, end_date, city);
+DO $$
+DECLARE
+  is_unique boolean;
+BEGIN
+  SELECT i.indisunique
+    INTO is_unique
+  FROM pg_class c
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+  JOIN pg_index i ON i.indexrelid = c.oid
+  WHERE n.nspname = 'analytics'
+    AND c.relname = 'ux_calendar_event_dates';
+
+  -- Si no existe (NULL) o existe pero no es unique, lo (re)creamos
+  IF is_unique IS DISTINCT FROM true THEN
+    -- si existe como indice pero no-unique, lo botamos
+    IF is_unique IS NOT NULL THEN
+      EXECUTE 'DROP INDEX IF EXISTS analytics.ux_calendar_event_dates';
+    END IF;
+
+    EXECUTE 'CREATE UNIQUE INDEX IF NOT EXISTS ux_calendar_event_dates
+             ON analytics.commercial_calendar_pe (event_name, start_date, end_date, city)';
   END IF;
 END $$;
 
@@ -80,6 +94,16 @@ CREATE TABLE IF NOT EXISTS analytics.trends_weekly (
   ingested_at      timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (week_start, keyword_canonica, geo)
 );
+
+-- Compatibilidad con CSV (week_start, keyword_canonica, geo, region, interest)
+ALTER TABLE analytics.trends_weekly
+  ADD COLUMN IF NOT EXISTS region text;
+
+ALTER TABLE analytics.trends_weekly
+  ALTER COLUMN region SET DEFAULT 'ALL';
+
+CREATE INDEX IF NOT EXISTS ix_trends_region
+  ON analytics.trends_weekly (region);
 
 DO $$
 BEGIN

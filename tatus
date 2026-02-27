@@ -1,0 +1,39 @@
+warning: in the working copy of 'etl/ga4_sync_daily.cmd', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'etl/ga4_to_local.py', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/etl/ga4_sync_daily.cmd b/etl/ga4_sync_daily.cmd[m
+[1mindex 8213ef3..cec7ab4 100644[m
+[1m--- a/etl/ga4_sync_daily.cmd[m
+[1m+++ b/etl/ga4_sync_daily.cmd[m
+[36m@@ -9,8 +9,8 @@[m [mset PYTHONIOENCODING=utf-8[m
+ set "NEON_CONNECTION_STRING=Host=localhost;Port=5433;Username=postgres;Password=postgres;Database=chiru_local"[m
+ [m
+ set "GA4_PROPERTY_ID=513497372"[m
+[31m-set "GA4_CLIENT=C:\Users\%USERNAME%\secrets\ga4-oauth-client.json"[m
+[31m-set "GA4_TOKEN=C:\Users\%USERNAME%\secrets\ga4-token.json"[m
+[32m+[m[32mset "GA4_CLIENT=C:\Users\chris\secrets\ga4-oauth-client.json"[m
+[32m+[m[32mset "GA4_TOKEN=C:\Users\chris\secrets\ga4-token.json"[m
+ [m
+ set "LOG=etl\ga4_sync.log"[m
+ echo ==== GA4 SYNC START %DATE% %TIME% ====>> "%LOG%"[m
+[1mdiff --git a/etl/ga4_to_local.py b/etl/ga4_to_local.py[m
+[1mindex 1a35ea6..5c62cb6 100644[m
+[1m--- a/etl/ga4_to_local.py[m
+[1m+++ b/etl/ga4_to_local.py[m
+[36m@@ -169,7 +169,7 @@[m [mdef upsert_event_daily(cur, rows: List[Tuple[dt.date, str, int, int, int]]) -> i[m
+     if not rows:[m
+         return 0[m
+     sql = '''[m
+[31m-    INSERT INTO ga4.event_daily (day, event_name, event_count, total_users, sessions, updated_at)[m
+[32m+[m[32m    INSERT INTO ga4.event_daily (day, event_name, event_count, total_users, sessions)[m
+     VALUES %s[m
+     ON CONFLICT (day, event_name)[m
+     DO UPDATE SET[m
+[36m@@ -186,7 +186,7 @@[m [mdef upsert_funnel_daily(cur, rows: List[Tuple[dt.date, int, int, int, int, int]][m
+     if not rows:[m
+         return 0[m
+     sql = '''[m
+[31m-    INSERT INTO ga4.funnel_daily (day, sessions, view_item, add_to_cart, begin_checkout, purchase, updated_at)[m
+[32m+[m[32m    INSERT INTO ga4.funnel_daily (day, sessions, view_item, add_to_cart, begin_checkout, purchase)[m
+     VALUES %s[m
+     ON CONFLICT (day)[m
+     DO UPDATE SET[m

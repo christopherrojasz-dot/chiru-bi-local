@@ -19,3 +19,20 @@ Thumbs.db
 
 cmd/_env_neon.local.cmd
 *.log
+
+# Secrets / env
+cmd/_env_neon.local.cmd
+*.env
+*.env.*
+**/*token*.json
+**/*oauth*.json
+**/*credentials*.json
+
+# Logs
+etl/*.log
+etl/*_build_*.log
+
+# Data pesada (GitHub no acepta >100MB)
+data/kaggle_raw/
+data/trends_raw/
+backups/*.dump

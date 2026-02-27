@@ -145,25 +145,99 @@ def run_funnel_daily(
         out.append((day, sessions, view_item, add_to_cart, begin_checkout, purchase))
     return out
 
+def run_search_term_daily(
+    client: BetaAnalyticsDataClient,
+    property_id: str,
+    start_date: str,
+    end_date: str
+) -> List[Tuple[dt.date, str, int]]:
+    """
+    Extrae términos de búsqueda internos (searchTerm) para el evento view_search_results.
+    Requiere que la web envíe el parámetro search_term o tenga Site Search habilitado.
+    """
+    request = RunReportRequest(
+        property=f"properties/{property_id}",
+        date_ranges=[DateRange(start_date=start_date, end_date=end_date)],
+        dimensions=[
+            Dimension(name="date"),
+            Dimension(name="searchTerm"),
+            Dimension(name="eventName"),
+        ],
+        metrics=[Metric(name="eventCount")],
+        dimension_filter=FilterExpression(
+            filter=Filter(
+                field_name="eventName",
+                in_list_filter=Filter.InListFilter(values=["view_search_results"]),
+            )
+        ),
+    )
+
+    resp = client.run_report(request)
+
+    # agregamos por seguridad por si GA4 devuelve duplicados raros
+    acc: Dict[Tuple[dt.date, str], int] = {}
+
+    for r in resp.rows:
+        day_str = r.dimension_values[0].value  # YYYYMMDD
+        term = (r.dimension_values[1].value or "").strip()
+        # dim[2] = eventName (es constante por el filtro)
+
+        if not term or term.lower() in ("(not set)", "not set"):
+            continue
+
+        day = dt.datetime.strptime(day_str, "%Y%m%d").date()
+        cnt = int(r.metric_values[0].value or 0)
+
+        key = (day, term)
+        acc[key] = acc.get(key, 0) + cnt
+
+    return [(d, t, c) for (d, t), c in acc.items()]
 
 def connect_pg(conn_str: str):
-    parts = {}
-    for chunk in conn_str.split(";"):
+    """
+    Soporta:
+    1) URI: postgresql://user:pass@host:5432/db?sslmode=require
+    2) KV:  Host=...;Port=...;Username=...;Password=...;Database=...;Ssl Mode=Require;
+    """
+    s = (conn_str or "").strip()
+    if not s:
+        raise ValueError("Conexion vacia. Define NEON_URL o NEON_CONNECTION_STRING.")
+
+    # Caso URI (lo mas robusto para Neon)
+    if s.lower().startswith(("postgresql://", "postgres://")):
+        return psycopg2.connect(s)
+
+    # Caso key=value;
+    parts: Dict[str, str] = {}
+    for chunk in s.split(";"):
         chunk = chunk.strip()
         if not chunk or "=" not in chunk:
             continue
         k, v = chunk.split("=", 1)
         parts[k.strip().lower()] = v.strip()
 
-    dsn = " ".join([
-        f"host={parts.get('host', '')}",
+    host = parts.get("host", "")
+    sslmode = (parts.get("sslmode") or parts.get("ssl mode") or "").strip().lower()
+
+    # Neon casi siempre requiere SSL
+    if not sslmode and host.endswith("neon.tech"):
+        sslmode = "require"
+
+    # Defensa ante conn_str roto tipo Host=Port=...
+    if not host or host.lower().startswith("port=") or host.lower() == "port=":
+        raise ValueError(f"NEON_CONNECTION_STRING malformado. Host='{host}'. Usa NEON_URL para Neon.")
+
+    dsn_parts = [
+        f"host={host}",
         f"port={parts.get('port', '5432')}",
         f"user={parts.get('username', parts.get('user', ''))}",
         f"password={parts.get('password', '')}",
         f"dbname={parts.get('database', parts.get('dbname', ''))}",
-    ])
-    return psycopg2.connect(dsn)
+    ]
+    if sslmode:
+        dsn_parts.append(f"sslmode={sslmode}")
 
+    return psycopg2.connect(" ".join(dsn_parts))
 
 def upsert_event_daily(cur, rows: List[Tuple[dt.date, str, int, int, int]]) -> int:
     if not rows:
@@ -200,11 +274,24 @@ def upsert_funnel_daily(cur, rows: List[Tuple[dt.date, int, int, int, int, int]]
     execute_values(cur, sql, rows)
     return len(rows)
 
+def upsert_search_term_daily(cur, rows: List[Tuple[dt.date, str, int]]) -> int:
+    if not rows:
+        return 0
+    sql = '''
+    INSERT INTO ga4.search_term_daily (day, search_term, event_count)
+    VALUES %s
+    ON CONFLICT (day, search_term)
+    DO UPDATE SET
+      event_count = EXCLUDED.event_count,
+      updated_at = now();
+    '''
+    execute_values(cur, sql, rows)
+    return len(rows)
 
 def main() -> int:
     args = parse_args()
 
-    conn_str = os.environ.get("NEON_CONNECTION_STRING", "")
+    conn_str = os.environ.get("NEON_URL") or os.environ.get("NEON_CONNECTION_STRING", "")    
     property_id = os.environ.get("GA4_PROPERTY_ID", "")
     client_path = os.environ.get("GA4_CLIENT", "")
     token_path = os.environ.get("GA4_TOKEN", "")
@@ -235,6 +322,7 @@ def main() -> int:
     try:
         event_rows = run_event_daily(client, property_id, start_date, end_date)
         funnel_rows = run_funnel_daily(client, property_id, start_date, end_date)
+        search_rows = run_search_term_daily(client, property_id, start_date, end_date)
     except Exception as e:
         print(f"[ERROR] GA4 API fallo: {e}")
         return 4
@@ -249,6 +337,7 @@ def main() -> int:
         with conn.cursor() as cur:
             inserted_events = upsert_event_daily(cur, event_rows)
             inserted_funnel = upsert_funnel_daily(cur, funnel_rows)
+            inserted_search = upsert_search_term_daily(cur, search_rows)
         conn.commit()
         conn.close()
         print(f"[OK] Upsert completado: event_daily={inserted_events} filas, funnel_daily={inserted_funnel} filas.")

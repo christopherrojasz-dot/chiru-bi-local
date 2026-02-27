@@ -1,0 +1,105 @@
+keyword_raw,keyword_canonica,categoria,subcategoria,sinonimo_de,es_error_ortografico,prioridad
+celu,celular,Tecnología,Celulares,celular,0,1
+celular,celular,Tecnología,Celulares,celular,0,1
+samsng,samsung,Tecnología,Celulares,samsung,1,2
+freidora de aire,air fryer,Hogar,Cocina,air fryer,0,1
+airfryer,air fryer,Hogar,Cocina,air fryer,0,2
+tenis,zapatillas,Moda,Calzado,zapatillas,0,1
+zapatillas,zapatillas,Moda,Calzado,zapatillas,0,1
+bloqueador,protector solar,Belleza,Skin care,protector solar,0,2
+tabas,zapatillas,Moda,Calzado,zapatillas,0,1
+mouse,mouse,Tecnología,PC,,0,1
+raton ,mouse,Tecnología,PC,mouse,0,1
+mouse inalámbrico,mouse,Tecnología,PC,mouse,0,1
+mous,mouse,Tecnología,PC,mouse,1,1
+teclado,teclaso,Tecnología,PC,teclado,0,1
+tecla ,teclaso,Tecnología,PC,teclado,1,1
+mando,mando,Tecnología,PS,mando,0,1
+control,mando,Tecnología,PS,mando,0,1
+joystick,mando,Tecnología,PS,mando,0,1
+gamepad,mando,Tecnología,PS,mando,0,1
+mouse gamer,mouse gamer,Tecnología,Computación,mouse,0,1
+monitor,monitor,Tecnología,Computación,pantalla,0,1
+webcam,webcam,Tecnología,Computación,camara,0,1
+impresora,impresora,Tecnología,Periféricos,impresora,0,1
+tinta impresora,tinta impresora,Tecnología,Periféricos,impresora,0,1
+audífonos,audífonos,Tecnología,Audio,audífonos,0,1
+auriculares bluetooth,audífonos,Tecnología,Audio,audífonos,0,2
+parlante bluetooth,parlante bluetooth,Tecnología,Audio,,0,1
+smartwatch,smartwatch,Tecnología,Wearables,,0,1
+reloj inteligente,smartwatch,Tecnología,Wearables,smartwatch,0,2
+cámara de seguridad,cámara de seguridad,Tecnología,Smart Home,,0,1
+router wifi,router wifi,Tecnología,Redes,,0,1
+foco inteligente,foco inteligente,Tecnología,Smart Home,,0,1
+alexa,alexa,Tecnología,Smart Home,,0,1
+disco ssd,disco ssd,Tecnología,Almacenamiento,,0,1
+zapatillas,zapatillas,Moda,Calzado,,0,1
+tenis deportivos,zapatillas,Moda,Calzado,zapatillas,0,2
+botas,botas,Moda,Calzado,,0,1
+sandalias,sandalias,Moda,Calzado,,0,1
+tacones,tacones,Moda,Calzado,,0,1
+zapatos formales,zapatos formales,Moda,Calzado,,0,1
+zapatillas running,zapatillas running,Moda,Calzado,,0,1
+zapatillas urbanas,zapatillas urbanas,Moda,Calzado,,0,1
+mocasines,mocasines,Moda,Calzado,,0,1
+pantuflas,pantuflas,Moda,Calzado,,0,1
+polo,polo,Moda,Ropa,,0,1
+polera,polo,Moda,Ropa,polo,0,2
+casaca,casaca,Moda,Ropa,,0,1
+jeans,jeans,Moda,Ropa,,0,1
+pantalón cargo,pantalón cargo,Moda,Ropa,,0,1
+vestido,vestido,Moda,Ropa,,0,1
+blusa,blusa,Moda,Ropa,,0,1
+falda,falda,Moda,Ropa,,0,1
+ropa deportiva mujer,ropa deportiva mujer,Moda,Ropa deportiva,,0,1
+ropa deportiva hombre,ropa deportiva hombre,Moda,Ropa deportiva,,0,1
+mochila,mochila,Moda,Accesorios,,0,1
+cartera,cartera,Moda,Accesorios,,0,1
+billetera,billetera,Moda,Accesorios,,0,1
+gorra,gorra,Moda,Accesorios,,0,1
+lentes de sol,lentes de sol,Moda,Accesorios,,0,1
+reloj hombre,reloj hombre,Moda,Accesorios,,0,1
+reloj mujer,reloj mujer,Moda,Accesorios,,0,1
+cadena de acero,cadena de acero,Moda,Joyería,,0,1
+aretes,aretes,Moda,Joyería,,0,1
+pulsera,pulsera,Moda,Joyería,,0,1
+air fryer,air fryer,Hogar,Cocina,,0,1
+licuadora,licuadora,Hogar,Cocina,,0,1
+hervidor eléctrico,hervidor eléctrico,Hogar,Cocina,,0,1
+cafetera,cafetera,Hogar,Cocina,,0,1
+microondas,microondas,Hogar,Cocina,,0,1
+olla arrocera,olla arrocera,Hogar,Cocina,,0,1
+batidora,batidora,Hogar,Cocina,,0,1
+sandwichera,sandwichera,Hogar,Cocina,,0,1
+aspiradora,aspiradora,Hogar,Limpieza,,0,1
+robot aspirador,robot aspirador,Hogar,Limpieza,,0,1
+colchón,colchón,Hogar,Dormitorio,,0,1
+almohada ortopédica,almohada ortopédica,Hogar,Dormitorio,,0,1
+sábanas,sábanas,Hogar,Dormitorio,,0,1
+cortinas,cortinas,Hogar,Decoración,,0,1
+organizador de ropa,organizador de ropa,Hogar,Organización,,0,1
+escritorio,escritorio,Hogar,Muebles,,0,1
+silla ergonómica,silla ergonómica,Hogar,Muebles,,0,1
+lámpara led,lámpara led,Hogar,Iluminación,,0,1
+espejo cuerpo entero,espejo cuerpo entero,Hogar,Decoración,,0,1
+humidificador,humidificador,Hogar,Bienestar,,0,1
+protector solar,protector solar,Belleza,Skin care,,0,1
+bloqueador solar,protector solar,Belleza,Skin care,protector solar,0,2
+crema hidratante,crema hidratante,Belleza,Skin care,,0,1
+sérum vitamina c,sérum vitamina c,Belleza,Skin care,,0,1
+limpiador facial,limpiador facial,Belleza,Skin care,,0,1
+shampoo anticaída,shampoo anticaída,Belleza,Cabello,,0,1
+acondicionador,acondicionador,Belleza,Cabello,,0,1
+perfume mujer,perfume mujer,Belleza,Fragancias,,0,1
+perfume hombre,perfume hombre,Belleza,Fragancias,,0,1
+maquillaje base,maquillaje base,Belleza,Maquillaje,,0,1
+mancuerna,mancuerna,Deportes,Fitness,,0,1
+banda elástica,banda elástica,Deportes,Fitness,,0,1
+colchoneta yoga,colchoneta yoga,Deportes,Yoga,,0,1
+coche de bebé,coche de bebé,Bebés,Paseo,,0,1
+pañales,pañales,Bebés,Higiene,,0,1
+cama para perro,cama para perro,Mascotas,Perros,,0,1
+correa para perro,correa para perro,Mascotas,Perros,,0,1
+arena para gato,arena para gato,Mascotas,Gatos,,0,1
+soporte celular auto,soporte celular auto,Automotriz,Accesorios,,0,1
+dashcam,dashcam,Automotriz,Seguridad,,0,1

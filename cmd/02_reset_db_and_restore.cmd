@@ -32,8 +32,12 @@ type "%DUMP%" | docker exec -i %CONTAINER% psql -U %PGUSER% -d %DB% -v ON_ERROR_
 type "sql\90_local_patch.sql" | docker exec -i %CONTAINER% psql -U %PGUSER% -d %DB% -v ON_ERROR_STOP=1 || goto FAIL
 type "sql\95_seed_minimal.sql" | docker exec -i %CONTAINER% psql -U %PGUSER% -d %DB% -v ON_ERROR_STOP=1 || goto FAIL
 type "sql\99_sanity_checks.sql" | docker exec -i %CONTAINER% psql -U %PGUSER% -d %DB% -v ON_ERROR_STOP=1 || goto FAIL
-REM ✅ NUEVO: tablas core del Radar (calendar + trends)
+REM NUEVO: tablas core del Radar (calendar + trends)
 type "sql\40_radar_core_tables.sql" | docker exec -i %CONTAINER% psql -U %PGUSER% -d %DB% -v ON_ERROR_STOP=1 || goto FAIL
+
+call "cmd\05_radar_load_inputs.cmd" || goto FAIL
+
+call "cmd\06_radar_build_views.cmd" || goto FAIL
 
 echo [OK] Reset completo.
 goto END

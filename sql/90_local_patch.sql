@@ -464,3 +464,18 @@ BEGIN
   END;
 
 END $$;
+
+-- GA4: internal search terms (required by Radar views)
+CREATE TABLE IF NOT EXISTS ga4.search_term_daily (
+  day date NOT NULL,
+  search_term text NOT NULL,
+  event_count bigint NOT NULL DEFAULT 0,
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  CONSTRAINT pk_ga4_search_term_daily PRIMARY KEY (day, search_term)
+);
+
+CREATE INDEX IF NOT EXISTS ix_ga4_search_term_daily_day
+  ON ga4.search_term_daily(day);
+
+CREATE INDEX IF NOT EXISTS ix_ga4_search_term_daily_term
+  ON ga4.search_term_daily(search_term);
